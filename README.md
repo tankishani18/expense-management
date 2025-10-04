@@ -42,7 +42,7 @@
 *Secure login interface for all users*
 
 ### 2. Sign Up / Company Creation
-![Sign Up](Readme_Screenshots/Screenshot%202025-10-04%20154042.png)
+![Sign Up](Readme_Screenshots/Screenshot%202025-10-04%20164426.png) 
 *Create your company account with automatic currency setup based on country selection*
 
 ### 3. Dashboard - Admin View
