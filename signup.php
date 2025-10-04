@@ -167,36 +167,49 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 
+   
+
     <script>
-        fetch('https://restcountries.com/v3.1/all?fields=name,currencies')
-            .then(response => response.json())
-            .then(data => {
-                const countrySelect = document.getElementById('country');
-                const sortedCountries = data.sort((a, b) => 
-                    a.name.common.localeCompare(b.name.common)
-                );
-                
-                sortedCountries.forEach(country => {
-                    const option = document.createElement('option');
-                    option.value = country.name.common;
-                    option.textContent = country.name.common;
-                    option.dataset.currencies = JSON.stringify(country.currencies);
-                    countrySelect.appendChild(option);
-                });
+    // Fetch country & currency data from API
+    fetch('https://restcountries.com/v3.1/all?fields=name,currencies')
+        .then(response => response.json())
+        .then(data => {
+            const countrySelect = document.getElementById('country');
+            const sortedCountries = data.sort((a, b) => 
+                a.name.common.localeCompare(b.name.common)
+            );
+            
+            sortedCountries.forEach(country => {
+                const option = document.createElement('option');
+                option.value = country.name.common;
+                option.textContent = country.name.common;
+
+                // Attach currency data to each option
+                option.dataset.currencies = JSON.stringify(country.currencies);
+                countrySelect.appendChild(option);
             });
-        
-        document.getElementById('country').addEventListener('change', function() {
-            const selectedOption = this.options[this.selectedIndex];
-            if (selectedOption.dataset.currencies) {
-                const currencies = JSON.parse(selectedOption.dataset.currencies);
-                const currencyCode = Object.keys(currencies)[0];
-                const currency = currencies[currencyCode];
-                
-                document.getElementById('currency_code').value = currencyCode;
-                document.getElementById('currency_symbol').value = currency.symbol || currencyCode;
-                document.getElementById('currency_display').value = ${currencyCode} (${currency.symbol || ''});
-            }
-        });
-    </script>
+        })
+        .catch(err => console.error("Error loading countries:", err));
+
+    // When user selects a country
+    document.getElementById('country').addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        if (selectedOption.dataset.currencies) {
+            const currencies = JSON.parse(selectedOption.dataset.currencies);
+            const currencyCode = Object.keys(currencies)[0];  // e.g. "USD"
+            const currency = currencies[currencyCode];        // e.g. { name: "United States dollar", symbol: "$" }
+
+            document.getElementById('currency_code').value = currencyCode;
+            document.getElementById('currency_symbol').value = currency.symbol || currencyCode;
+            document.getElementById('currency_display').value = `${currencyCode} (${currency.symbol || ''})`;
+        } else {
+            // Clear if no currency info found
+            document.getElementById('currency_code').value = '';
+            document.getElementById('currency_symbol').value = '';
+            document.getElementById('currency_display').value = '';
+        }
+    });
+</script>
+
 </body>
 </html>
