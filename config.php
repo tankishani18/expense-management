@@ -74,7 +74,7 @@ function convert_currency($amount, $from_currency, $to_currency) {
     
     return $amount;
 }
-
+//HI THERE
 function format_currency($amount, $currency_symbol = '₹') {
     return $currency_symbol . ' ' . number_format($amount, 2);
 }
